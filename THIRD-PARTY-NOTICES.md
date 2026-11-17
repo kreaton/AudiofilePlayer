@@ -10,7 +10,7 @@ _Last reviewed: 2026-11-17. Versions are the ones resolved in this repository at
 |---|---|---|---|---|
 | NAudio | 2.2.1 | MIT | [NuGet](https://www.nuget.org/packages/NAudio/2.2.1) · [source](https://github.com/naudio/NAudio) | No |
 | TagLibSharp | 2.3.0 | LGPL-2.1-only — used unmodified as a separate, replaceable `TagLibSharp.dll` | [NuGet](https://www.nuget.org/packages/TagLibSharp/2.3.0) · [source](https://github.com/mono/taglib-sharp) | No |
-| Velopack | 1.2.161 | MIT | [NuGet](https://www.nuget.org/packages/Velopack/1.2.161) · [source](https://github.com/velopack/velopack) | No |
+| Velopack | 1.3.39-g8d2844f | MIT | [NuGet](https://www.nuget.org/packages/Velopack/1.3.39-g8d2844f) · [source](https://github.com/velopack/velopack) | No |
 
 <details>
 <summary>Indirect (transitive) dependencies — 6 packages</summary>
