@@ -34,7 +34,8 @@ public sealed record TrackInfo(
             var p = f.Properties;
 
             string details = $"{sizeText}, {p.AudioBitrate} kbps, {p.AudioSampleRate / 1000.0:0.0##} kHz, " +
-                             $"{(p.AudioChannels == 1 ? "mono" : "stereo")}, {FormatTime(p.Duration)}";
+                             $"{p.AudioChannels switch { 1 => "mono", 2 => "stereo", var n => $"{n} channels" }}, " +
+                             FormatTime(p.Duration);
 
             string trackNo = t.Track == 0 ? "" : t.TrackCount > 0 ? $"{t.Track} / {t.TrackCount}" : t.Track.ToString();
 

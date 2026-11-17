@@ -8,7 +8,7 @@
 
 ![MP3 Player: open a folder and listen, with no library to build](images/banner.png)
 
-**A music player for Windows that plays every MP3 in a folder and all its subfolders.**
+**A music player for Windows that plays every music file in a folder and all its subfolders.**
 
 There's no library to build: open a folder and listen. If a track or album turns out not to be worth keeping, you can clean it up while it plays.
 
@@ -22,9 +22,10 @@ To get a newer version later, click the ⓘ button and choose **Check for update
 
 ## What it does
 
-- **Plays whole folders:** pick a folder and every MP3 under it goes into the playlist.
-- **Drag and drop:** drop a folder on the window to play it. Drop an MP3 and its folder becomes the playlist, starting with that track. Drop any other file and its folder opens, but nothing starts playing.
-- **Open with:** the installer adds the player to Explorer's **Open with** menu for MP3 files, and it works the same way as dropping the file. If the player is already running, the file opens in the window you already have instead of in a second player.
+- **Plays whole folders:** pick a folder and every music file under it goes into the playlist.
+- **Many formats:** MP3, M4A/AAC, WMA, FLAC, WAV and AIFF, plus OGG and Opus when Windows has a decoder for them (the free Web Media Extensions from the Microsoft Store). A file that can't be decoded is skipped, with a note in the status bar. Tags and cover art are read from all of them. Surround (5.1, 7.1) files are mixed down to stereo.
+- **Drag and drop:** drop a folder on the window to play it. Drop a music file and its folder becomes the playlist, starting with that track. Drop any other kind of file and its folder opens, but nothing starts playing.
+- **Open with:** the installer adds the player to Explorer's **Open with** menu for all these file types, and it works the same way as dropping the file. If the player is already running, the file opens in the window you already have instead of in a second player.
 - **Shuffle:** every track plays once in random order before any track repeats.
 - **Crossfade:** blends the end of one track into the start of the next, over 1 to 18 seconds.
 - **Search:** type part of an artist, album or song title to find a track and play it.
@@ -84,7 +85,7 @@ dotnet build Mp3Player.slnx
 dotnet run --project Mp3Player.Wpf
 ```
 
-The app takes an optional folder or file path. With a folder, that folder opens and playback starts right away. With an MP3 file, its folder opens and playback starts with that file. If the player is already running, the path goes to that window instead:
+The app takes an optional folder or file path. With a folder, that folder opens and playback starts right away. With a music file, its folder opens and playback starts with that file. If the player is already running, the path goes to that window instead:
 
 ```bash
 dotnet run --project Mp3Player.Wpf -- "D:\Music\Some Album"

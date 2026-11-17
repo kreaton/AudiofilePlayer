@@ -6,8 +6,8 @@ public enum PlayerState { Stopped, Playing, Paused }
 
 /// <summary>What a "delete the current folder" would remove; show this to the user before calling it.</summary>
 /// <param name="FolderPath">The folder that would be deleted.</param>
-/// <param name="FileCount">All files in it, including subfolders and non-MP3 files.</param>
-/// <param name="TrackCount">How many of those are MP3 tracks in the playlist.</param>
+/// <param name="FileCount">All files in it, including subfolders and files that are not tracks.</param>
+/// <param name="TrackCount">How many of those are tracks in the playlist.</param>
 /// <param name="TotalBytes">Total size of all files.</param>
 public sealed record DirectoryDeletionPreview(string FolderPath, int FileCount, int TrackCount, long TotalBytes);
 
@@ -125,11 +125,14 @@ public sealed class MusicPlayer : IDisposable
     }
     // ------------------------------------------------------------------ loading and transport
 
-    /// <summary>True if the file is one the player can play (an .mp3), judged by its extension.</summary>
+    /// <summary>The audio file extensions the player plays (".mp3", ".m4a", ...).</summary>
+    public static IReadOnlyList<string> SupportedExtensions => Playlist.Extensions;
+
+    /// <summary>True if the file is one the player plays, judged by its extension.</summary>
     public static bool IsSupportedFile(string path) => Playlist.IsTrackFile(path);
 
     /// <summary>
-    /// Scans the folder and all its subfolders for MP3 files (on a worker thread) and replaces the playlist.
+    /// Scans the folder and all its subfolders for audio files (on a worker thread) and replaces the playlist.
     /// Stops playback; starts the first track if <paramref name="play"/> is true.
     /// If <paramref name="startTrack"/> is one of the tracks found, it becomes the current (and, in shuffle
     /// mode, the first) track instead.

@@ -111,7 +111,7 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
 
     private string _windowTitle = "MP3 Player";
     private string _heading = "Open a folder to start";
-    private string _subHeading = "Choose a folder with MP3 files";
+    private string _subHeading = "Choose a folder with music files";
     private string _folderText = "No folder selected";
     private string _fileName = Dash, _folderPath = Dash, _details = Dash;
     private string _title = Dash, _artist = Dash, _album = Dash, _year = Dash, _trackNo = Dash, _genre = Dash, _comment = Dash;
@@ -150,7 +150,7 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
             FileName = FolderPath = Details = Dash;
             Title = Artist = Album = Year = TrackNo = Genre = Comment = Dash;
             Heading = _player.LibraryFolder == null ? "Open a folder to start" : "No tracks";
-            SubHeading = _player.LibraryFolder == null ? "Choose a folder with MP3 files" : "No MP3 files left in this folder";
+            SubHeading = _player.LibraryFolder == null ? "Choose a folder with music files" : "No music files left in this folder";
             WindowTitle = "MP3 Player";
             SetCover(null);
             UpdatePosition(TimeSpan.Zero, TimeSpan.Zero);
@@ -390,7 +390,7 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
 
     /// <summary>
     /// Opens a dropped or "Open with" path. A folder opens and plays from the start. A file opens the folder it is
-    /// in; if it is an MP3, playback starts with that file, otherwise the folder is only loaded.
+    /// in; if it is a playable audio file, playback starts with that file, otherwise the folder is only loaded.
     /// </summary>
     public Task OpenPathAsync(string path)
     {
@@ -438,7 +438,7 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
 
         FolderText = _player.LibraryFolder ?? dir;
         if (_player.TrackCount == 0)
-            _dialogs.ShowMessage("MP3 Player", "No MP3 files were found in that folder or its subfolders.", isError: false);
+            _dialogs.ShowMessage("MP3 Player", "No music files were found in that folder or its subfolders.", isError: false);
     }
 
     private void TogglePlayPause()
@@ -508,7 +508,7 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
         string how = UseRecycleBin ? "It will be moved to the Recycle Bin" : "It will be deleted permanently";
         bool confirmed = await _dialogs.ConfirmAsync(
             "Delete this entire folder?",
-            $"It contains {preview.FileCount} file(s) in total ({preview.TrackCount} MP3, " +
+            $"It contains {preview.FileCount} file(s) in total ({preview.TrackCount} tracks, " +
             $"{preview.TotalBytes / 1048576.0:0.0} MB), including any subfolders. " +
             $"{how}, and the next track outside this folder will play.",
             preview.FolderPath,

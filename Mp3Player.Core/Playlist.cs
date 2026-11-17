@@ -23,19 +23,28 @@ internal sealed class Playlist
 
     public string? Current => _pos >= 0 && _pos < _order.Count ? _order[_pos] : null;
 
-    /// <summary>True for the files the player can play (.mp3), judged by the extension only.</summary>
-    public static bool IsTrackFile(string path) => path.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase);
+    /// <summary>
+    /// The audio file types that are played. MP3, WAV and AIFF are decoded by NAudio itself; everything else goes
+    /// through Windows' Media Foundation, which has decoders for these built in (Ogg/Opus need the "Web Media
+    /// Extensions" from the Store, usually preinstalled). A file that turns out not to decode is skipped when played.
+    /// </summary>
+    public static readonly IReadOnlyList<string> Extensions =
+        [".mp3", ".m4a", ".aac", ".wma", ".flac", ".wav", ".aif", ".aiff", ".ogg", ".opus"];
 
-    /// <summary>Finds all .mp3 files in the directory and all its subdirectories (can run on a worker thread).</summary>
+    private static readonly HashSet<string> ExtensionSet = new(Extensions, StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>True for the files the player plays, judged by the extension only.</summary>
+    public static bool IsTrackFile(string path) => ExtensionSet.Contains(Path.GetExtension(path));
+
+    /// <summary>Finds all audio files in the directory and all its subdirectories (can run on a worker thread).</summary>
     public static List<string> Scan(string directory)
     {
         var options = new EnumerationOptions
         {
             RecurseSubdirectories = true,
             IgnoreInaccessible = true,
-            MatchCasing = MatchCasing.CaseInsensitive,
         };
-        var list = Directory.EnumerateFiles(directory, "*.mp3", options)
+        var list = Directory.EnumerateFiles(directory, "*", options)
             .Where(IsTrackFile)
             .ToList();
         list.Sort(CompareTracks);

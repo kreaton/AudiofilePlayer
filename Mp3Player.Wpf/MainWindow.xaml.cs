@@ -409,7 +409,7 @@ internal partial class MainWindow : Window, IDialogService
     private string? _dragPath;      // what the current drag would open, or null if it can't be dropped here
     private bool _dragInside;
 
-    /// <summary>The path a drag carries: the first MP3 if there is one, otherwise the first existing file or folder.</summary>
+    /// <summary>The path a drag carries: the first playable audio file if there is one, otherwise the first existing file or folder.</summary>
     private static string? GetDroppedPath(DragEventArgs e)
     {
         if (e.Data.GetData(DataFormats.FileDrop) is not string[] { Length: > 0 } paths) return null;
@@ -469,7 +469,7 @@ internal partial class MainWindow : Window, IDialogService
         DropTitle.Text = folder ? "Play this folder" : playable ? "Play this track" : "Open the folder it's in";
         DropDetail.Text = folder ? path
             : playable ? name + " - its folder becomes the playlist"
-            : name + " is not an MP3, so nothing starts playing";
+            : name + " is not a file the player can play, so nothing starts playing";
 
         if (DropOverlay.Visibility != Visibility.Visible)
         {

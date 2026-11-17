@@ -8,7 +8,7 @@ using System.Text;
 namespace Mp3Player.Wpf;
 
 /// <summary>
-/// Keeps "Open with" (or a double-click on an MP3) from starting a second player next to the one already playing:
+/// Keeps "Open with" (or a double-click on a music file) from starting a second player next to the one already playing:
 /// the first instance listens on a named pipe, and a later launch with a path hands the path over and exits.
 /// Scoped to the current user and Windows session; the pipe only accepts connections from the same user.
 /// </summary>

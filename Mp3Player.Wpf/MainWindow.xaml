@@ -700,7 +700,7 @@
                                Foreground="{DynamicResource AccentBrush}"/>
                     <TextBlock Margin="0,14,0,0" FontSize="13.5" TextWrapping="Wrap" TextAlignment="Center"
                                Foreground="{StaticResource TextSecondary}"
-                               Text="Plays every MP3 in a folder and its subfolders, with shuffle, crossfade and quick clean-up of tracks and albums."/>
+                               Text="Plays every music file in a folder and its subfolders, with shuffle, crossfade and quick clean-up of tracks and albums."/>
 
                     <Border Margin="0,20,0,0" Padding="16,12" CornerRadius="10" Background="#22FFFFFF">
                         <StackPanel>

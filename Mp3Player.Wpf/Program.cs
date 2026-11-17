@@ -10,7 +10,7 @@ internal static class Program
     {
         // Must be the first thing to run: handles Velopack's install/update/uninstall hooks
         // and may exit the process. Don't swallow exceptions here.
-        // The hooks add the player to Explorer's "Open with" list for MP3 files, and remove it again.
+        // The hooks add the player to Explorer's "Open with" list for the audio file types it plays, and remove it again.
         VelopackApp.Build()
             .OnAfterInstallFastCallback(_ => FileAssociations.TryRun(FileAssociations.Register))
             .OnAfterUpdateFastCallback(_ => FileAssociations.TryRun(FileAssociations.Register))

@@ -4,7 +4,7 @@ using NAudio.Wave.SampleProviders;
 namespace Mp3Player.Core;
 
 /// <summary>
-/// One playing track: decodes an MP3, converts it to 44.1 kHz stereo float, and applies a
+/// One playing track: decodes the file, converts it to 44.1 kHz stereo float, and applies a
 /// fade-in / fade-out gain envelope. Several voices are summed by the mixer, which is what
 /// makes crossfading possible.
 /// </summary>
@@ -31,12 +31,12 @@ internal sealed class Voice : ISampleProvider, IDisposable
         try
         {
             ISampleProvider src = _reader;
+            if (src.WaveFormat.Channels > 2)
+                src = new StereoDownmixSampleProvider(src);      // before resampling: fewer channels to resample
             if (src.WaveFormat.SampleRate != sampleRate)
                 src = new WdlResamplingSampleProvider(src, sampleRate);
             if (src.WaveFormat.Channels == 1)
-                src = new MonoToStereoSampleProvider(src);
-            else if (src.WaveFormat.Channels != 2)
-                throw new NotSupportedException("Only mono and stereo files are supported.");
+                src = new MonoToStereoSampleProvider(src);       // after resampling: half the work
             _source = src;
         }
         catch
@@ -149,6 +149,71 @@ internal sealed class Voice : ISampleProvider, IDisposable
             _disposed = true;
             _reader.Dispose();
         }
+    }
+}
+
+/// <summary>
+/// Folds a multichannel track (quad, 5.1, 7.1) down to stereo: front left/right as they are, the centre at -3 dB
+/// into both sides, surrounds at -3 dB into their own side, and the LFE (subwoofer) channel left out.
+/// The decoders don't pass on which speaker each channel is for, so the standard Windows channel order for the
+/// channel count is assumed. The result is scaled so a loud passage on every channel at once cannot clip.
+/// </summary>
+internal sealed class StereoDownmixSampleProvider : ISampleProvider
+{
+    private const float Minus3dB = 0.7071f;
+
+    private readonly ISampleProvider _source;
+    private readonly int _channels;
+    private readonly float[] _left, _right;     // how much of each input channel goes into each output side
+    private float[] _buffer = [];
+
+    public StereoDownmixSampleProvider(ISampleProvider source)
+    {
+        _source = source;
+        _channels = source.WaveFormat.Channels;
+        WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(source.WaveFormat.SampleRate, 2);
+        _left = new float[_channels];
+        _right = new float[_channels];
+
+        _left[0] = 1f;
+        _right[1] = 1f;
+        int c = 2;
+        if (_channels is 3 or >= 5) { _left[c] = _right[c] = Minus3dB; c++; }   // centre (quad has none)
+        if (_channels >= 6) c++;                                                // LFE
+        for (bool left = true; c < _channels; c++, left = !left)               // surround pairs
+            (left ? _left : _right)[c] = Minus3dB;
+
+        float scale = 1f / Math.Max(_left.Sum(), _right.Sum());
+        for (int i = 0; i < _channels; i++)
+        {
+            _left[i] *= scale;
+            _right[i] *= scale;
+        }
+    }
+
+    public WaveFormat WaveFormat { get; }
+
+    public int Read(float[] buffer, int offset, int count)
+    {
+        int frames = count / 2;
+        int needed = frames * _channels;
+        if (_buffer.Length < needed) _buffer = new float[needed];
+
+        int framesRead = _source.Read(_buffer, 0, needed) / _channels;
+        for (int f = 0; f < framesRead; f++)
+        {
+            float l = 0f, r = 0f;
+            int first = f * _channels;
+            for (int ch = 0; ch < _channels; ch++)
+            {
+                float s = _buffer[first + ch];
+                l += s * _left[ch];
+                r += s * _right[ch];
+            }
+            buffer[offset + 2 * f] = l;
+            buffer[offset + 2 * f + 1] = r;
+        }
+        return framesRead * 2;
     }
 }
 
