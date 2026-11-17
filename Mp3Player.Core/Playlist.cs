@@ -23,6 +23,9 @@ internal sealed class Playlist
 
     public string? Current => _pos >= 0 && _pos < _order.Count ? _order[_pos] : null;
 
+    /// <summary>True for the files the player can play (.mp3), judged by the extension only.</summary>
+    public static bool IsTrackFile(string path) => path.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase);
+
     /// <summary>Finds all .mp3 files in the directory and all its subdirectories (can run on a worker thread).</summary>
     public static List<string> Scan(string directory)
     {
@@ -33,7 +36,7 @@ internal sealed class Playlist
             MatchCasing = MatchCasing.CaseInsensitive,
         };
         var list = Directory.EnumerateFiles(directory, "*.mp3", options)
-            .Where(f => f.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase))
+            .Where(IsTrackFile)
             .ToList();
         list.Sort(CompareTracks);
         return list;
@@ -51,11 +54,12 @@ internal sealed class Playlist
         return d + Path.DirectorySeparatorChar;
     }
 
-    public void SetTracks(IEnumerable<string> files)
+    /// <summary>Replaces the tracks. <paramref name="startWith"/> (if in the list) becomes current, and first in shuffle mode.</summary>
+    public void SetTracks(IEnumerable<string> files, string? startWith = null)
     {
         _all.Clear();
         _all.AddRange(files);
-        Rebuild(null);
+        Rebuild(startWith);
     }
 
     public void SetShuffle(bool on)

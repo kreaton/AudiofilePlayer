@@ -6,6 +6,7 @@
         Icon="app.ico"
         Width="1120" Height="760" MinWidth="940" MinHeight="680"
         WindowStartupLocation="CenterScreen"
+        AllowDrop="True"
         FontFamily="Segoe UI Variable Text, Segoe UI"
         Foreground="{DynamicResource TextPrimary}"
         TextOptions.TextFormattingMode="Ideal">
@@ -798,6 +799,19 @@
                             Margin="0,18,0,0" HorizontalAlignment="Right" Click="ShortcutsClose_Click"/>
                 </StackPanel>
             </Border>
+        </Grid>
+
+        <!-- ============================ drop hint (shown while a file or folder is dragged over the window) ============================ -->
+        <Grid x:Name="DropOverlay" Background="#B2000000" Visibility="Collapsed" IsHitTestVisible="False">
+            <Rectangle Margin="22" RadiusX="22" RadiusY="22" Fill="#14FFFFFF"
+                       Stroke="{DynamicResource AccentBrush}" StrokeThickness="2" StrokeDashArray="6 4"/>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="60,0">
+                <TextBlock x:Name="DropGlyph" FontFamily="{StaticResource IconFont}" FontSize="56"
+                           HorizontalAlignment="Center" Foreground="{DynamicResource AccentBrush}"/>
+                <TextBlock x:Name="DropTitle" Margin="0,18,0,0" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="DropDetail" Margin="0,8,0,0" FontSize="14" HorizontalAlignment="Center"
+                           TextTrimming="CharacterEllipsis" Foreground="{StaticResource TextSecondary}"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

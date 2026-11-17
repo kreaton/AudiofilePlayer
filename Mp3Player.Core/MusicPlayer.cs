@@ -125,19 +125,28 @@ public sealed class MusicPlayer : IDisposable
     }
     // ------------------------------------------------------------------ loading and transport
 
+    /// <summary>True if the file is one the player can play (an .mp3), judged by its extension.</summary>
+    public static bool IsSupportedFile(string path) => Playlist.IsTrackFile(path);
+
     /// <summary>
     /// Scans the folder and all its subfolders for MP3 files (on a worker thread) and replaces the playlist.
     /// Stops playback; starts the first track if <paramref name="play"/> is true.
+    /// If <paramref name="startTrack"/> is one of the tracks found, it becomes the current (and, in shuffle
+    /// mode, the first) track instead.
     /// </summary>
-    public async Task LoadFolderAsync(string folder, bool play)
+    public async Task LoadFolderAsync(string folder, bool play, string? startTrack = null)
     {
         ThrowIfDisposed();
         string root = Path.TrimEndingDirectorySeparator(Path.GetFullPath(folder));
-        var (files, index) = await Task.Run(() =>
+        string? wanted = startTrack == null ? null : Path.GetFullPath(startTrack);
+        var (files, index, start) = await Task.Run(() =>
         {
             List<string> found = Playlist.Scan(root);
+            // The scan spells the path the way the file system does, which can differ in case from what we were given.
+            string? match = wanted == null ? null
+                : found.Find(f => string.Equals(f, wanted, StringComparison.OrdinalIgnoreCase));
             return (found, new ConcurrentDictionary<string, TrackSummary>(
-                found.Select(f => KeyValuePair.Create(f, TrackSummary.FromFileName(f)))));
+                found.Select(f => KeyValuePair.Create(f, TrackSummary.FromFileName(f)))), match);
         });
         ThrowIfDisposed();
 
@@ -145,7 +154,7 @@ public sealed class MusicPlayer : IDisposable
         _advanceWhenResumed = false;
         _state = PlayerState.Stopped;
         _libraryRoot = root;
-        _playlist.SetTracks(files);
+        _playlist.SetTracks(files, start);
         StartSearchIndex(files, index);
         RefreshInfo();
 

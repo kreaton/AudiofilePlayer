@@ -21,14 +21,16 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
     private readonly IDialogService _dialogs;
     private readonly MusicPlayer _player;
     private readonly Settings _settings = Settings.Load();
-    private readonly string? _startFolder;
+    private readonly string? _startPath;
     private readonly DispatcherTimer _timer;
+    private readonly SemaphoreSlim _loadGate = new(1, 1);   // one folder load at a time, in the order asked
     private string _note = "";
 
-    public PlayerViewModel(IDialogService dialogs, string? startFolder)
+    /// <param name="startPath">A folder or file from the command line ("Open with"), opened instead of the saved folder.</param>
+    public PlayerViewModel(IDialogService dialogs, string? startPath)
     {
         _dialogs = dialogs;
-        _startFolder = startFolder;
+        _startPath = startPath;
         _player = new MusicPlayer();
 
         // Initial option values come from the saved settings.
@@ -373,9 +375,40 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
 
     public async Task InitializeAsync()
     {
-        string? dir = _startFolder ?? _settings.Folder;
+        if (_openRequested) return;     // a drop or hand-over came first and is what the user wants now
+        if (_startPath != null)
+        {
+            await OpenPathCoreAsync(_startPath);
+            return;
+        }
+        string? dir = _settings.Folder;
         if (!string.IsNullOrEmpty(dir) && Directory.Exists(dir))
-            await LoadFolderAsync(dir, play: _startFolder != null);
+            await LoadFolderAsync(dir, play: false);
+    }
+
+    private bool _openRequested;
+
+    /// <summary>
+    /// Opens a dropped or "Open with" path. A folder opens and plays from the start. A file opens the folder it is
+    /// in; if it is an MP3, playback starts with that file, otherwise the folder is only loaded.
+    /// </summary>
+    public Task OpenPathAsync(string path)
+    {
+        _openRequested = true;
+        return OpenPathCoreAsync(path);
+    }
+
+    private async Task OpenPathCoreAsync(string path)
+    {
+        if (Directory.Exists(path))
+        {
+            await LoadFolderAsync(path, play: true);
+        }
+        else if (File.Exists(path) && Path.GetDirectoryName(Path.GetFullPath(path)) is { } dir)
+        {
+            bool playable = MusicPlayer.IsSupportedFile(path);
+            await LoadFolderAsync(dir, play: playable, startTrack: playable ? path : null);
+        }
     }
 
     private async Task OpenFolderAsync()
@@ -384,12 +417,13 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
         if (dir != null) await LoadFolderAsync(dir, play: true);
     }
 
-    private async Task LoadFolderAsync(string dir, bool play)
+    private async Task LoadFolderAsync(string dir, bool play, string? startTrack = null)
     {
+        await _loadGate.WaitAsync();
         IsBusy = true;
         try
         {
-            await _player.LoadFolderAsync(dir, play);
+            await _player.LoadFolderAsync(dir, play, startTrack);
         }
         catch (Exception ex)
         {
@@ -399,6 +433,7 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
         finally
         {
             IsBusy = false;
+            _loadGate.Release();
         }
 
         FolderText = _player.LibraryFolder ?? dir;

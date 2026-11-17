@@ -32,11 +32,12 @@ internal partial class MainWindow : Window, IDialogService
     private MediaSession? _mediaSession;
     private TaskCompletionSource<bool>? _confirmation;
 
-    public MainWindow(string? startFolder)
+    /// <param name="startPath">A folder or file from the command line ("Open with"), or null for the saved folder.</param>
+    public MainWindow(string? startPath)
     {
         InitializeComponent();
 
-        _vm = new PlayerViewModel(this, startFolder);
+        _vm = new PlayerViewModel(this, startPath);
         DataContext = _vm;
         _vm.PropertyChanged += OnViewModelPropertyChanged;
         ApplyAccent(_vm.Accent, animate: false);
@@ -51,6 +52,10 @@ internal partial class MainWindow : Window, IDialogService
         AboutVersion.Text = "Version " + AppInfo.Version;
 
         PreviewKeyDown += OnPreviewKeyDown;
+        PreviewDragEnter += OnPreviewDragEnter;
+        PreviewDragOver += OnPreviewDragOver;
+        PreviewDragLeave += OnPreviewDragLeave;
+        PreviewDrop += OnPreviewDrop;
         _vm.SearchIndexReady += (_, _) =>
         {
             if (SearchOverlay.Visibility == Visibility.Visible) RunSearch();
@@ -395,6 +400,98 @@ internal partial class MainWindow : Window, IDialogService
             default: return;
         }
         e.Handled = true;
+    }
+
+    // ------------------------------------------------------------------ drag and drop, "Open with"
+
+    private const string TrackGlyph = "", FolderGlyph = "";
+
+    private string? _dragPath;      // what the current drag would open, or null if it can't be dropped here
+    private bool _dragInside;
+
+    /// <summary>The path a drag carries: the first MP3 if there is one, otherwise the first existing file or folder.</summary>
+    private static string? GetDroppedPath(DragEventArgs e)
+    {
+        if (e.Data.GetData(DataFormats.FileDrop) is not string[] { Length: > 0 } paths) return null;
+        return paths.FirstOrDefault(p => MusicPlayer.IsSupportedFile(p) && File.Exists(p))
+               ?? paths.FirstOrDefault(p => File.Exists(p) || Directory.Exists(p));
+    }
+
+    /// <summary>Not while a card is open (the main layer is disabled then) or a folder is still loading.</summary>
+    private bool CanAcceptDrop => MainLayer.IsEnabled && !_vm.IsBusy;
+
+    private void OnPreviewDragEnter(object sender, DragEventArgs e)
+    {
+        _dragInside = true;
+        _dragPath = CanAcceptDrop ? GetDroppedPath(e) : null;
+        ShowDropHint(_dragPath);
+        OnPreviewDragOver(sender, e);
+    }
+
+    private void OnPreviewDragOver(object sender, DragEventArgs e)
+    {
+        e.Effects = _dragPath != null ? DragDropEffects.Copy : DragDropEffects.None;
+        e.Handled = true;
+    }
+
+    private void OnPreviewDragLeave(object sender, DragEventArgs e)
+    {
+        // Moving from one element to another inside the window raises DragLeave and then DragEnter,
+        // so only hide the hint if no DragEnter followed.
+        _dragInside = false;
+        Dispatcher.BeginInvoke(() => { if (!_dragInside) HideDropHint(); }, DispatcherPriority.Background);
+    }
+
+    private async void OnPreviewDrop(object sender, DragEventArgs e)
+    {
+        _dragInside = false;
+        HideDropHint();
+        e.Handled = true;
+
+        string? path = CanAcceptDrop ? GetDroppedPath(e) : null;
+        if (path == null) return;
+        Activate();
+        await _vm.OpenPathAsync(path);
+    }
+
+    private void ShowDropHint(string? path)
+    {
+        if (path == null)
+        {
+            HideDropHint();
+            return;
+        }
+
+        bool folder = Directory.Exists(path);
+        bool playable = !folder && MusicPlayer.IsSupportedFile(path);
+        string name = Path.GetFileName(Path.TrimEndingDirectorySeparator(path));
+        DropGlyph.Text = playable ? TrackGlyph : FolderGlyph;
+        DropTitle.Text = folder ? "Play this folder" : playable ? "Play this track" : "Open the folder it's in";
+        DropDetail.Text = folder ? path
+            : playable ? name + " - its folder becomes the playlist"
+            : name + " is not an MP3, so nothing starts playing";
+
+        if (DropOverlay.Visibility != Visibility.Visible)
+        {
+            DropOverlay.Visibility = Visibility.Visible;
+            FadeIn(DropOverlay, 1.0, 120);
+        }
+    }
+
+    private void HideDropHint() => DropOverlay.Visibility = Visibility.Collapsed;
+
+    /// <summary>
+    /// A path handed over by a later launch of the app (for example "Open with" while the player is already running).
+    /// Open cards are closed first, so a pending "delete" can never apply to the newly opened track.
+    /// </summary>
+    public async void OpenFromOtherInstance(string path)
+    {
+        BringToFront();
+        if (_confirmation != null) CloseConfirmation(false);
+        if (AboutOverlay.Visibility == Visibility.Visible) CloseAbout();
+        if (ShortcutsOverlay.Visibility == Visibility.Visible) CloseShortcuts();
+        if (SearchOverlay.Visibility == Visibility.Visible) CloseSearch();
+        await _vm.OpenPathAsync(path);
     }
 
     // ------------------------------------------------------------------ window events

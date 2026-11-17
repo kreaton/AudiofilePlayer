@@ -23,6 +23,8 @@ To get a newer version later, click the ⓘ button and choose **Check for update
 ## What it does
 
 - **Plays whole folders:** pick a folder and every MP3 under it goes into the playlist.
+- **Drag and drop:** drop a folder on the window to play it. Drop an MP3 and its folder becomes the playlist, starting with that track. Drop any other file and its folder opens, but nothing starts playing.
+- **Open with:** the installer adds the player to Explorer's **Open with** menu for MP3 files, and it works the same way as dropping the file. If the player is already running, the file opens in the window you already have instead of in a second player.
 - **Shuffle:** every track plays once in random order before any track repeats.
 - **Crossfade:** blends the end of one track into the start of the next, over 1 to 18 seconds.
 - **Search:** type part of an artist, album or song title to find a track and play it.
@@ -82,10 +84,14 @@ dotnet build Mp3Player.slnx
 dotnet run --project Mp3Player.Wpf
 ```
 
-The app takes an optional folder path. When it's given, that folder opens and playback starts right away:
+The app takes an optional folder or file path. With a folder, that folder opens and playback starts right away. With an MP3 file, its folder opens and playback starts with that file. If the player is already running, the path goes to that window instead:
 
 ```bash
 dotnet run --project Mp3Player.Wpf -- "D:\Music\Some Album"
+```
+
+```bash
+dotnet run --project Mp3Player.Wpf -- "D:\Music\Some Album\03 Some Track.mp3"
 ```
 
 ### Releases
