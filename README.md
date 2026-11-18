@@ -5,6 +5,9 @@
 ![Windows](https://img.shields.io/badge/platform-Windows-lightgrey)
 ![.NET 10](https://img.shields.io/badge/.NET-10-lightgrey)
 ![WPF](https://img.shields.io/badge/UI-WPF-lightgrey)
+[![GitHub stars](https://img.shields.io/github/stars/kreaton/Mp3Player?style=social)](https://github.com/kreaton/Mp3Player/stargazers)
+
+⭐ If MP3 Player earns a place on your machine, [star it on GitHub](https://github.com/kreaton/Mp3Player) — it's free, made by one developer, and stars are how other people find it.
 
 ![MP3 Player: open a folder and listen, with no library to build](images/banner.png)
 
