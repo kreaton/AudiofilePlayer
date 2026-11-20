@@ -4,8 +4,8 @@ version: 2
 updates:
   - package-ecosystem: "nuget"
     directories:
-      - "/Mp3Player.Core"
-      - "/Mp3Player.Wpf"
+      - "/AudiofilePlayer.Core"
+      - "/AudiofilePlayer.Wpf"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5

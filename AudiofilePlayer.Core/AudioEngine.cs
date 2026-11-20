@@ -1,7 +1,7 @@
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 
-namespace Mp3Player.Core;
+namespace AudiofilePlayer.Core;
 
 /// <summary>
 /// One playing track: decodes the file, converts it to 44.1 kHz stereo float, and applies a

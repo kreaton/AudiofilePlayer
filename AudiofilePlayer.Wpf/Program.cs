@@ -1,7 +1,7 @@
 using System.IO;
 using Velopack;
 
-namespace Mp3Player.Wpf;
+namespace AudiofilePlayer.Wpf;
 
 internal static class Program
 {

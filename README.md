@@ -1,15 +1,15 @@
-# MP3 Player
+# Audiofile Player
 
-[![Release](https://img.shields.io/github/v/release/kreaton/Mp3Player)](https://github.com/kreaton/Mp3Player/releases/latest)
+[![Release](https://img.shields.io/github/v/release/kreaton/AudiofilePlayer)](https://github.com/kreaton/AudiofilePlayer/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 ![Windows](https://img.shields.io/badge/platform-Windows-lightgrey)
 ![.NET 10](https://img.shields.io/badge/.NET-10-lightgrey)
 ![WPF](https://img.shields.io/badge/UI-WPF-lightgrey)
-[![GitHub stars](https://img.shields.io/github/stars/kreaton/Mp3Player?style=flat&logo=github&color=yellow)](https://github.com/kreaton/Mp3Player/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/kreaton/AudiofilePlayer?style=flat&logo=github&color=yellow)](https://github.com/kreaton/AudiofilePlayer/stargazers)
 
-⭐ If MP3 Player earns a place on your machine, [star it on GitHub](https://github.com/kreaton/Mp3Player) — it's free, made by one developer, and stars are how other people find it.
+⭐ If Audiofile Player earns a place on your machine, [star it on GitHub](https://github.com/kreaton/AudiofilePlayer) — it's free, made by one developer, and stars are how other people find it.
 
-![MP3 Player: open a folder and listen, with no library to build](images/banner.png)
+![Audiofile Player: open a folder and listen, with no library to build](images/banner.png)
 
 **A music player for Windows that plays every music file in a folder and all its subfolders.**
 
@@ -17,11 +17,13 @@ There's no library to build: open a folder and listen. If a track or album turns
 
 ## Install
 
-**[Download the installer](https://github.com/kreaton/Mp3Player/releases/latest/download/Mp3Player-win-Setup.exe)** and run it. If your PC doesn't have the .NET 10 Desktop Runtime yet, the installer adds it.
+**[Download the installer](https://github.com/kreaton/AudiofilePlayer/releases/latest/download/AudiofilePlayer-win-Setup.exe)** and run it. If your PC doesn't have the .NET 10 Desktop Runtime yet, the installer adds it.
 
 The installer isn't code-signed, so Windows may warn you about it. To continue, choose **More info → Run anyway**.
 
 To get a newer version later, click the ⓘ button and choose **Check for updates**. To remove the app, use **Settings → Apps → Installed apps** in Windows.
+
+**Coming from MP3 Player?** The app used to be called MP3 Player. Version 1.1.8 and older can't update to Audiofile Player by themselves, so install it with the link above and then uninstall MP3 Player in **Settings → Apps → Installed apps**. Your folder, volume and options carry over.
 
 ## What it does
 
@@ -39,7 +41,7 @@ To get a newer version later, click the ⓘ button and choose **Check for update
 - **Now-playing notification:** turn on the bell at the bottom right to get a silent notification when a new track starts while the player is in the background.
 - **Remembers your settings:** your last folder, volume, shuffle, crossfade and the toggles are still there next time.
 
-![MP3 Player playing a track, with cover art, file details and tag information](promo-video/public/app/main-neon.png)
+![Audiofile Player playing a track, with cover art, file details and tag information](promo-video/public/app/main-neon.png)
 
 ## Keyboard shortcuts
 
@@ -70,32 +72,32 @@ Words can be in any order and accents are ignored, so `tears bonnie` finds "Save
 
 | Project | Description |
 |---|---|
-| `Mp3Player.Core` | The UI-independent player: audio engine with crossfading, playlist and shuffle, tag reading and settings. See its [API reference](Mp3Player.Core/README.md). |
-| `Mp3Player.Wpf` | WPF front end with the Fluent theme (`Mp3PlayerWpf.exe`). |
+| `AudiofilePlayer.Core` | The UI-independent player: audio engine with crossfading, playlist and shuffle, tag reading and settings. See its [API reference](AudiofilePlayer.Core/README.md). |
+| `AudiofilePlayer.Wpf` | WPF front end with the Fluent theme (`AudiofilePlayer.exe`). |
 | `promo-video` | Promo videos made with Remotion. See its [README](promo-video/README.md). |
 
 The player uses [NAudio](https://github.com/naudio/NAudio) 2.2.1 for decoding and playback, and [TagLibSharp](https://github.com/mono/taglib-sharp) 2.3.0 for ID3 tags and cover art. Settings are saved to `%AppData%\Mp3Player\settings.json`.
 
 ### Build and run
 
-You need the [.NET 10 SDK](https://dotnet.microsoft.com/download). You can also open `Mp3Player.slnx` in a Visual Studio version that supports .NET 10, with `Mp3Player.Wpf` as the startup project.
+You need the [.NET 10 SDK](https://dotnet.microsoft.com/download). You can also open `AudiofilePlayer.slnx` in a Visual Studio version that supports .NET 10, with `AudiofilePlayer.Wpf` as the startup project.
 
 ```bash
-dotnet build Mp3Player.slnx
+dotnet build AudiofilePlayer.slnx
 ```
 
 ```bash
-dotnet run --project Mp3Player.Wpf
+dotnet run --project AudiofilePlayer.Wpf
 ```
 
 The app takes an optional folder or file path. With a folder, that folder opens and playback starts right away. With a music file, its folder opens and playback starts with that file. If the player is already running, the path goes to that window instead:
 
 ```bash
-dotnet run --project Mp3Player.Wpf -- "D:\Music\Some Album"
+dotnet run --project AudiofilePlayer.Wpf -- "D:\Music\Some Album"
 ```
 
 ```bash
-dotnet run --project Mp3Player.Wpf -- "D:\Music\Some Album\03 Some Track.mp3"
+dotnet run --project AudiofilePlayer.Wpf -- "D:\Music\Some Album\03 Some Track.mp3"
 ```
 
 ### Releases
@@ -113,7 +115,7 @@ This project is distributed under the terms of the [MIT License](LICENSE).
 <!-- notices:start -->
 ### Independent development
 
-Mp3Player is an independent, personal project developed by Per Hejndorf. It is not affiliated with, endorsed by or sponsored by Microsoft or any other rights holder. Product names and logos are trademarks of their respective owners and are used only to identify the services and tools the project works with.
+Audiofile Player is an independent, personal project developed by Per Hejndorf. It is not affiliated with, endorsed by or sponsored by Microsoft or any other rights holder. Product names and logos are trademarks of their respective owners and are used only to identify the services and tools the project works with.
 
 ### Third-party notices and asset provenance
 

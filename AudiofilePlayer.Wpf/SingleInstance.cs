@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
 
-namespace Mp3Player.Wpf;
+namespace AudiofilePlayer.Wpf;
 
 /// <summary>
 /// Keeps "Open with" (or a double-click on a music file) from starting a second player next to the one already playing:
@@ -25,7 +25,7 @@ internal sealed class SingleInstance : IDisposable
     {
         using var process = Process.GetCurrentProcess();
         string user = WindowsIdentity.GetCurrent().User?.Value ?? Environment.UserName;
-        return $"Mp3Player.{user}.{process.SessionId}";
+        return $"AudiofilePlayer.{user}.{process.SessionId}";
     }
 
     /// <summary>Returns the claim if this is the first running instance, or null if another one is already running.</summary>

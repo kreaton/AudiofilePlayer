@@ -5,7 +5,7 @@ using Microsoft.Win32;
 using Windows.Data.Xml.Dom;
 using Windows.UI.Notifications;
 
-namespace Mp3Player.Wpf;
+namespace AudiofilePlayer.Wpf;
 
 /// <summary>
 /// Shows a silent "now playing" Windows notification. The app is not packaged, so it registers its own
@@ -14,11 +14,11 @@ namespace Mp3Player.Wpf;
 /// </summary>
 internal sealed class TrackNotifier
 {
-    private const string AppId = "Mp3Player.Wpf.NowPlaying";
+    private const string AppId = "AudiofilePlayer.Wpf.NowPlaying";
     private const string Tag = "now-playing", Group = "player";
 
     private static readonly string DataDir = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Mp3Player", "notifications");
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AudiofilePlayer", "notifications");
 
     private readonly Action _onClicked;
     private ToastNotifier? _notifier;

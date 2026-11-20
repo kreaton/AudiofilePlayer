@@ -1,10 +1,10 @@
-# Mp3Player.Core
+# AudiofilePlayer.Core
 
-All of the MP3 player's logic in one class library, with no UI code. The WPF front end (`Mp3Player.Wpf`) is a thin layer over it. Use it to build another front end, or to script playback.
+All of Audiofile Player's logic in one class library, with no UI code. The WPF front end (`AudiofilePlayer.Wpf`) is a thin layer over it. Use it to build another front end, or to script playback.
 
 It handles:
 
-- scanning a folder tree for `.mp3` files and building a playlist
+- scanning a folder tree for audio files (MP3, M4A, FLAC and more) and building a playlist
 - playing in order, or shuffled with no repeats
 - crossfading between tracks
 - volume and seeking
@@ -18,7 +18,7 @@ Target: `net10.0-windows`. Dependencies: [NAudio](https://github.com/naudio/NAud
 ## Quick start
 
 ```csharp
-using Mp3Player.Core;
+using AudiofilePlayer.Core;
 
 // Create the player on the UI thread (see "Threading" below).
 var player = new MusicPlayer { Volume = 70, Shuffle = true, CrossfadeSeconds = 6 };
@@ -94,7 +94,7 @@ If there's no context (for example a console app), it falls back to a plain `Syn
 
 | Method | Description |
 |---|---|
-| `Task LoadFolderAsync(string folder, bool play)` | Scans `folder` and all its subfolders for `.mp3` files on a worker thread, then replaces the playlist. Tracks are sorted by folder, then file name. Stops current playback first, and starts the first track if `play` is `true`. Await it on the UI thread. |
+| `Task LoadFolderAsync(string folder, bool play)` | Scans `folder` and all its subfolders for audio files on a worker thread, then replaces the playlist. Tracks are sorted by folder, then file name. Stops current playback first, and starts the first track if `play` is `true`. Await it on the UI thread. |
 | `void Play()` | Resumes when paused. When stopped, starts the current track. |
 | `void Pause()` | Pauses. If the track ends while paused, playback continues with the next track on `Play()`. |
 | `void Next()` | Goes to the next track. In order mode it wraps around at the end; in shuffle mode a new round starts. |
@@ -127,7 +127,7 @@ These methods delete files on disk, so ask the user first. By default files go t
 | `void DeleteCurrentTrack(bool useRecycleBin = true)` | Deletes the current track's file, removes it from the playlist and plays the next track. Throws `InvalidOperationException` when there's no track. If the delete fails, the exception is rethrown and the player is left stopped with the playlist unchanged. |
 | `bool CanDeleteCurrentDirectory` | `true` when the current track's folder can be deleted. It's `false` when there's no track, or when the track sits directly in `LibraryFolder`: deleting that folder would delete the whole library. Use it to enable or disable the "delete folder" command. |
 | `DirectoryDeletionPreview GetCurrentDirectoryDeletionPreview()` | Counts what `DeleteCurrentDirectory` would remove, for the confirmation dialog. |
-| `void DeleteCurrentDirectory(bool useRecycleBin = true)` | Deletes the current track's folder, including subfolders and non-MP3 files. It removes all of that folder's tracks from the playlist and plays the first track after it that's outside the folder. Throws `InvalidOperationException` if `CanDeleteCurrentDirectory` is `false`. |
+| `void DeleteCurrentDirectory(bool useRecycleBin = true)` | Deletes the current track's folder, including subfolders and non-audio files. It removes all of that folder's tracks from the playlist and plays the first track after it that's outside the folder. Throws `InvalidOperationException` if `CanDeleteCurrentDirectory` is `false`. |
 
 Example of a confirmed folder delete:
 
@@ -155,7 +155,7 @@ if (player.CanDeleteCurrentDirectory)
 | Field | Description |
 |---|---|
 | `FolderPath` | The folder that would be deleted. |
-| `FileCount` | Every file in it, including subfolders, hidden files and non-MP3 files. |
+| `FileCount` | Every file in it, including subfolders, hidden files and non-audio files. |
 | `TrackCount` | How many of those are tracks in the playlist. |
 | `TotalBytes` | Total size of all the files. |
 
@@ -193,7 +193,7 @@ One search result. Tags that are missing, or haven't been read yet, are empty st
 
 ### `Settings`
 
-`public sealed class Settings`. Remembers options between runs in `%AppData%\Mp3Player\settings.json`. All front ends use the same file, so switching between them keeps your settings. The player doesn't read it by itself; the front end loads it and applies it.
+`public sealed class Settings`. Remembers options between runs in `%AppData%\AudiofilePlayer\settings.json`. If that file doesn't exist yet, `Load` reads the one from the app's old name, `%AppData%\Mp3Player\settings.json`. All front ends use the same file, so switching between them keeps your settings. The player doesn't read it by itself; the front end loads it and applies it.
 
 | Member | Description |
 |---|---|
@@ -224,4 +224,4 @@ These types are `internal`. They're described here to help you work on the libra
 
 - **`Playlist`**: the sorted track list plus the play order. In shuffle mode the order is a random permutation (Fisher–Yates) that's rebuilt after each full round. It also removes deleted tracks or folders and picks the next track after a removal.
 - **`AudioEngine`**: the audio pipeline: voices → `MixingSampleProvider` → master `VolumeSampleProvider` → `WaveOutEvent`. The output runs all the time and plays silence when nothing is playing, so pausing and resuming are instant. Starting a track while another is playing fades the old one out while the new one fades in. `TrackEnding` is raised on the audio thread, `CrossfadeSeconds` before the end of the current track. `MusicPlayer` posts it on to the UI thread.
-- **`Voice`**: one playing track. It decodes the MP3 with `AudioFileReader` and converts it to 44.1 kHz stereo float. It applies a fade-in/fade-out envelope per frame and removes itself from the mixer once it has faded out. Only mono and stereo files are supported.
+- **`Voice`**: one playing track. It decodes the file with `AudioFileReader` and converts it to 44.1 kHz stereo float. It applies a fade-in/fade-out envelope per frame and removes itself from the mixer once it has faded out. Only mono and stereo files are supported.

@@ -4,7 +4,7 @@ using System.Windows.Threading;
 using Windows.Media;
 using Windows.Storage.Streams;
 
-namespace Mp3Player.Wpf;
+namespace AudiofilePlayer.Wpf;
 
 /// <summary>
 /// Connects the player to Windows' System Media Transport Controls (SMTC): the media overlay shown by the

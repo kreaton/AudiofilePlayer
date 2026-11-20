@@ -1,9 +1,9 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
-using Mp3Player.Core;
+using AudiofilePlayer.Core;
 
-namespace Mp3Player.Wpf;
+namespace AudiofilePlayer.Wpf;
 
 /// <summary>
 /// Lists the player under "Open with" in Explorer for every audio file type it plays, for the current user only
@@ -14,10 +14,10 @@ namespace Mp3Player.Wpf;
 internal static class FileAssociations
 {
     private const string Classes = @"Software\Classes\";
-    private static readonly string ExeName = Path.GetFileName(Environment.ProcessPath ?? "Mp3PlayerWpf.exe");
+    private static readonly string ExeName = Path.GetFileName(Environment.ProcessPath ?? "AudiofilePlayer.exe");
 
-    /// <summary>One ProgID per type ("Mp3Player.m4a"), so Explorer can name the type of each file correctly.</summary>
-    private static string ProgId(string extension) => "Mp3Player" + extension;
+    /// <summary>One ProgID per type ("AudiofilePlayer.m4a"), so Explorer can name the type of each file correctly.</summary>
+    private static string ProgId(string extension) => "AudiofilePlayer" + extension;
 
     public static void Register()
     {

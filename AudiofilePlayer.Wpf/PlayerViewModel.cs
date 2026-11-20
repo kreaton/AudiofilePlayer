@@ -5,9 +5,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Mp3Player.Core;
+using AudiofilePlayer.Core;
 
-namespace Mp3Player.Wpf;
+namespace AudiofilePlayer.Wpf;
 
 /// <summary>Adapts <see cref="MusicPlayer"/> for data binding. No controls are touched here.</summary>
 internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
@@ -109,7 +109,7 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
 
     // ------------------------------------------------------------------ track display
 
-    private string _windowTitle = "MP3 Player";
+    private string _windowTitle = "Audiofile Player";
     private string _heading = "Open a folder to start";
     private string _subHeading = "Choose a folder with music files";
     private string _folderText = "No folder selected";
@@ -151,7 +151,7 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
             Title = Artist = Album = Year = TrackNo = Genre = Comment = Dash;
             Heading = _player.LibraryFolder == null ? "Open a folder to start" : "No tracks";
             SubHeading = _player.LibraryFolder == null ? "Choose a folder with music files" : "No music files left in this folder";
-            WindowTitle = "MP3 Player";
+            WindowTitle = "Audiofile Player";
             SetCover(null);
             UpdatePosition(TimeSpan.Zero, TimeSpan.Zero);
             return;
@@ -177,7 +177,7 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
             : hasArtist ? info.Artist
             : hasAlbum ? info.Album
             : Path.GetFileName(Path.GetDirectoryName(path)) ?? "";
-        WindowTitle = (hasArtist && hasTitle ? info.Artist + " - " + info.Title : Heading) + " - MP3 Player";
+        WindowTitle = (hasArtist && hasTitle ? info.Artist + " - " + info.Title : Heading) + " - Audiofile Player";
 
         SetCover(info.CoverArt);
         UpdatePosition(TimeSpan.Zero, _player.Duration);
@@ -427,7 +427,7 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
         }
         catch (Exception ex)
         {
-            _dialogs.ShowMessage("MP3 Player", "Could not read the folder:\n\n" + ex.Message, isError: true);
+            _dialogs.ShowMessage("Audiofile Player", "Could not read the folder:\n\n" + ex.Message, isError: true);
             return;
         }
         finally
@@ -438,7 +438,7 @@ internal sealed class PlayerViewModel : INotifyPropertyChanged, IDisposable
 
         FolderText = _player.LibraryFolder ?? dir;
         if (_player.TrackCount == 0)
-            _dialogs.ShowMessage("MP3 Player", "No music files were found in that folder or its subfolders.", isError: false);
+            _dialogs.ShowMessage("Audiofile Player", "No music files were found in that folder or its subfolders.", isError: false);
     }
 
     private void TogglePlayPause()

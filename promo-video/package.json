@@ -1,11 +1,11 @@
 {
-  "name": "mp3player-promo",
+  "name": "audiofileplayer-promo",
   "private": true,
   "scripts": {
     "studio": "remotion studio",
     "render": "npm run render:landscape && npm run render:short",
-    "render:landscape": "remotion render Promo out/mp3player-promo-4k.mp4 --scale=2",
-    "render:short": "remotion render PromoShort out/mp3player-short-4k.mp4 --scale=2"
+    "render:landscape": "remotion render Promo out/audiofileplayer-promo-4k.mp4 --scale=2",
+    "render:short": "remotion render PromoShort out/audiofileplayer-short-4k.mp4 --scale=2"
   },
   "dependencies": {
     "@remotion/cli": "4.0.540",

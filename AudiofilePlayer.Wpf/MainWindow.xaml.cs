@@ -11,20 +11,20 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using Microsoft.Win32;
-using Mp3Player.Core;
+using AudiofilePlayer.Core;
 using Velopack;
 using Velopack.Sources;
 
-namespace Mp3Player.Wpf;
+namespace AudiofilePlayer.Wpf;
 
 /// <summary>
 /// View code only: window plumbing, the in-window cards (confirmation, about, search), keyboard shortcuts, and the accent/animation effects.
-/// All player logic lives in <see cref="PlayerViewModel"/> and Mp3Player.Core.
+/// All player logic lives in <see cref="PlayerViewModel"/> and AudiofilePlayer.Core.
 /// </summary>
 internal partial class MainWindow : Window, IDialogService
 {
     // Public GitHub repo whose releases BuildRelease.ps1 uploads to
-    private const string RepoUrl = "https://github.com/kreaton/Mp3Player";
+    private const string RepoUrl = "https://github.com/kreaton/AudiofilePlayer";
 
     private readonly UpdateManager _updateManager = new(new GithubSource(RepoUrl, accessToken: null, prerelease: false));
     private readonly PlayerViewModel _vm;

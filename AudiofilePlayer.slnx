@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="AudiofilePlayer.Core/AudiofilePlayer.Core.csproj" />
+  <Project Path="AudiofilePlayer.Wpf/AudiofilePlayer.Wpf.csproj" />
+</Solution>

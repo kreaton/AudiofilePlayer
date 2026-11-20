@@ -1,9 +1,9 @@
 using System.Text.Json;
 
-namespace Mp3Player.Core;
+namespace AudiofilePlayer.Core;
 
 /// <summary>
-/// Remembers the last folder and options between runs (%AppData%\Mp3Player\settings.json).
+/// Remembers the last folder and options between runs (%AppData%\AudiofilePlayer\settings.json).
 /// Shared by every UI, so switching between them keeps your folder, volume and options.
 /// </summary>
 public sealed class Settings
@@ -20,16 +20,22 @@ public sealed class Settings
     /// <summary>Delete the current track right away, without asking first (folders are always confirmed).</summary>
     public bool DeleteTrackWithoutConfirmation { get; set; }
 
-    private static string FilePath => Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Mp3Player", "settings.json");
+    private static string FilePathIn(string appFolder) => Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), appFolder, "settings.json");
+
+    private static string FilePath => FilePathIn("AudiofilePlayer");
+
+    /// <summary>Where the settings were kept when the app was called MP3 Player; read once, until the first save.</summary>
+    private static string LegacyFilePath => FilePathIn("Mp3Player");
 
     public static Settings Load()
     {
         try
         {
-            if (File.Exists(FilePath))
+            string path = File.Exists(FilePath) ? FilePath : LegacyFilePath;
+            if (File.Exists(path))
             {
-                var s = JsonSerializer.Deserialize<Settings>(File.ReadAllText(FilePath)) ?? new Settings();
+                var s = JsonSerializer.Deserialize<Settings>(File.ReadAllText(path)) ?? new Settings();
                 s.Volume = Math.Clamp(s.Volume, 0, 100);
                 s.CrossfadeSeconds = Math.Clamp(s.CrossfadeSeconds, 1, 18);
                 return s;

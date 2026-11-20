@@ -126,7 +126,7 @@ export const TaskbarDesk = () => {
 	const down = frame >= clickAt && frame < clickAt + 5;
 
 	const hover = (i: number) => (i === 0 && p2 > 0.9 && p3 < 0.2 ? 0.16 : 0);
-	const titles = ['Midnight Mopeds - Untitled Demo 7 (Copy) - MP3 Player', 'The Velvet Static - Afterglow FM - MP3 Player'];
+	const titles = ['Midnight Mopeds - Untitled Demo 7 (Copy) - Audiofile Player', 'The Velvet Static - Afterglow FM - Audiofile Player'];
 	const notice = spring({frame: frame - clickAt - 6, fps, config: {damping: 16, stiffness: 160}});
 
 	return (
@@ -369,7 +369,7 @@ export const MediaDesk = () => {
 			>
 				<div style={{display: 'flex', alignItems: 'center', gap: 10, fontSize: 20, color: '#c9c9d8', marginBottom: 18}}>
 					<Img src={staticFile('icon.png')} style={{width: 24, height: 24}} />
-					MP3 Player
+					Audiofile Player
 				</div>
 				<div style={{position: 'relative', height: 132}}>
 					{TRACKS.map((t, i) => {
@@ -429,7 +429,7 @@ export const MediaDesk = () => {
 			>
 				<div style={{display: 'flex', alignItems: 'center', gap: 10, fontSize: 18, color: '#c9c9d8', marginBottom: 14}}>
 					<Img src={staticFile('icon.png')} style={{width: 22, height: 22}} />
-					<span style={{flex: 1}}>MP3 Player</span>
+					<span style={{flex: 1}}>Audiofile Player</span>
 					<Glyph name="bell" size={20} color="#c9c9d8" />
 				</div>
 				<div style={{display: 'flex', alignItems: 'center', gap: 18}}>

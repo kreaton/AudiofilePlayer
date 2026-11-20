@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace Mp3Player.Core;
+namespace AudiofilePlayer.Core;
 
 public enum PlayerState { Stopped, Playing, Paused }
 

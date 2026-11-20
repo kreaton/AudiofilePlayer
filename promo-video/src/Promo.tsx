@@ -27,7 +27,7 @@ const Logo = () => {
 		<AbsoluteFill style={{alignItems: 'center', justifyContent: 'center', fontFamily, paddingBottom: 60}}>
 			<Img src={staticFile('icon.png')} style={{width: 300, height: 300, transform: `scale(${icon * (1 + pulse * 0.05)})`, filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.55))'}} />
 			<div style={{fontSize: 150, fontWeight: 800, color: '#fff', letterSpacing: -3, marginTop: 26}}>
-				<Words text="MP3 Player" delay={14} step={6} />
+				<Words text="Audiofile Player" delay={14} step={6} />
 			</div>
 		</AbsoluteFill>
 	);
@@ -36,7 +36,7 @@ const Logo = () => {
 const Grooviest = () => (
 	<AbsoluteFill style={{alignItems: 'center', justifyContent: 'center', fontFamily, paddingBottom: 90, textAlign: 'center'}}>
 		<div style={{fontSize: 148, fontWeight: 800, lineHeight: 1.02, color: '#fff', letterSpacing: -3, width: 1500}}>
-			<Words text="The grooviest MP3 player around" step={4} />
+			<Words text="The grooviest audio player around" step={4} />
 		</div>
 	</AbsoluteFill>
 );
@@ -198,7 +198,7 @@ const WindowsMedia = () => (
 
 const Library = () => (
 	<>
-		<Caption title="Open one folder. Get them all." sub="Every MP3 in every subfolder. Your folder, volume and options are remembered." subDelay={14} />
+		<Caption title="Open one folder. Get them all." sub="Every track in every subfolder. Your folder, volume and options are remembered." subDelay={14} />
 		<Shot name="main-velvet" from={{x: 0.25, y: 0.07, z: 1.5}} to={WHOLE} moveFrames={60} />
 	</>
 );
@@ -235,7 +235,7 @@ const TaskbarDelete = () => (
 
 // ---------------------------------------------------------------- ending
 
-const REPO = 'github.com/kreaton/Mp3Player';
+const REPO = 'github.com/kreaton/AudiofilePlayer';
 
 const OpenSource = () => {
 	const frame = useCurrentFrame();
@@ -284,7 +284,7 @@ const Finale = () => {
 		<AbsoluteFill style={{alignItems: 'center', justifyContent: 'center', fontFamily, textAlign: 'center', paddingBottom: 80}}>
 			<Img src={staticFile('icon.png')} style={{width: 220, height: 220, transform: `scale(${icon * (1 + pulse * 0.05)})`, filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.55))'}} />
 			<div style={{fontSize: 130, fontWeight: 800, color: '#fff', letterSpacing: -3, marginTop: 20}}>
-				<Words text="MP3 Player" delay={6} step={4} />
+				<Words text="Audiofile Player" delay={6} step={4} />
 			</div>
 			<div style={{fontSize: 62, fontWeight: 600, color: '#fff', marginTop: 16}}>
 				<Words text="Party. Listen. Clean up." delay={18} step={8} />
@@ -410,7 +410,7 @@ const PhoneHook = () => {
 		<AbsoluteFill style={{alignItems: 'center', justifyContent: 'center', fontFamily, textAlign: 'center', paddingBottom: 240}}>
 			<Img src={staticFile('icon.png')} style={{width: 260, height: 260, transform: `scale(${icon * (1 + pulse * 0.05)})`, filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.55))'}} />
 			<div style={{fontSize: 136, fontWeight: 800, lineHeight: 1.02, color: '#fff', letterSpacing: -3, width: 960, marginTop: 40}}>
-				<Words text="The grooviest MP3 player around" step={3} />
+				<Words text="The grooviest audio player around" step={3} />
 			</div>
 		</AbsoluteFill>
 	);
@@ -447,7 +447,7 @@ const PhoneEnding = () => {
 				<div style={{display: 'flex', alignItems: 'center', gap: 30}}>
 					<Img src={staticFile('icon.png')} style={{width: 150, height: 150, transform: `scale(${icon * (1 + pulse * 0.05)})`}} />
 					<div style={{fontSize: 112, fontWeight: 800, color: '#fff', letterSpacing: -3}}>
-						<Words text="MP3 Player" delay={3} step={3} />
+						<Words text="Audiofile Player" delay={3} step={3} />
 					</div>
 				</div>
 				<div style={{fontSize: 60, fontWeight: 600, color: '#fff', margin: '26px 0 60px'}}>

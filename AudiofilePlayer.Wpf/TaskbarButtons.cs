@@ -4,7 +4,7 @@ using System.Windows.Media;
 using System.Windows.Shell;
 using Microsoft.Win32;
 
-namespace Mp3Player.Wpf;
+namespace AudiofilePlayer.Wpf;
 
 /// <summary>Delete / previous / play-pause / next buttons in the taskbar thumbnail preview (hover over the taskbar icon).</summary>
 internal sealed class TaskbarButtons

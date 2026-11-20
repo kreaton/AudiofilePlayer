@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace Mp3Player.Core;
+namespace AudiofilePlayer.Core;
 
 /// <summary>One search result: a track's file and the tags that can be searched.</summary>
 public sealed record TrackSummary(string FilePath, string Title, string Artist, string Album)

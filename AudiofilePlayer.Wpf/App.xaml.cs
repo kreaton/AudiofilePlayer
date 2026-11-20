@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Threading;
 
-namespace Mp3Player.Wpf;
+namespace AudiofilePlayer.Wpf;
 
 internal partial class App : Application
 {

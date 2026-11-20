@@ -1,4 +1,4 @@
-namespace Mp3Player.Core;
+namespace AudiofilePlayer.Core;
 
 /// <summary>
 /// The list of tracks found in a folder tree, plus the order they are played in.

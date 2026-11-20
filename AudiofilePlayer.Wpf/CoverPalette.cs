@@ -1,7 +1,7 @@
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Mp3Player.Wpf;
+namespace AudiofilePlayer.Wpf;
 
 /// <summary>Picks a vivid accent colour from album art, used to tint the whole UI.</summary>
 internal static class CoverPalette

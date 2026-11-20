@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace Mp3Player.Wpf;
+namespace AudiofilePlayer.Wpf;
 
 /// <summary>What the view-model needs from the window, so it never touches a control directly.</summary>
 internal interface IDialogService
@@ -39,7 +39,7 @@ internal sealed class RelayCommand : ICommand
 /// <summary>Name, version and credits shown on the About card and in the status bar.</summary>
 internal static class AppInfo
 {
-    public const string Name = "MP3 Player";
+    public const string Name = "Audiofile Player";
 
     /// <summary>"1.1.0", from the &lt;Version&gt; in the project file.</summary>
     public static string Version { get; } = typeof(AppInfo).Assembly.GetName().Version is { } v

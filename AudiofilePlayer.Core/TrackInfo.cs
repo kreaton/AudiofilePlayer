@@ -1,4 +1,4 @@
-namespace Mp3Player.Core;
+namespace AudiofilePlayer.Core;
 
 /// <summary>File and ID3/tag information for one track (read with TagLibSharp).</summary>
 public sealed record TrackInfo(

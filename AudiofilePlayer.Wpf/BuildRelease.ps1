@@ -12,9 +12,10 @@ param([switch]$LocalOnly)
 Set-Location -Path $PSScriptRoot
 $ErrorActionPreference = 'Stop'
 
-$AppName = "Mp3Player"
-$ExeName = "Mp3PlayerWpf.exe"
-$RepoUrl = "https://github.com/kreaton/Mp3Player"
+$AppName = "AudiofilePlayer"      # the Velopack pack id; it was "Mp3Player" up to version 1.1.8
+$AppTitle = "Audiofile Player"    # the name on shortcuts and in Installed apps
+$ExeName = "AudiofilePlayer.exe"
+$RepoUrl = "https://github.com/kreaton/AudiofilePlayer"
 $FirstVersion = "1.1.0"
 $PublishDir = ".\publish"
 $ReleasesDir = ".\Releases"
@@ -29,10 +30,16 @@ if (-not $LocalOnly) {
 
 # Find the highest version already packed. It is read from the full package's file name because
 # vpk download only fetches the package: a clean Releases folder has no releases.win.json.
-$largestVersion = Get-ChildItem -Path $ReleasesDir -Filter "$AppName-*-full.nupkg" -ErrorAction SilentlyContinue
-    | ForEach-Object { [version]($_.Name -replace "^$AppName-|-full\.nupkg$") }
+# Any pack id counts, so the numbering carries on across the rename from Mp3Player.
+$largestVersion = Get-ChildItem -Path $ReleasesDir -Filter "*-full.nupkg" -ErrorAction SilentlyContinue
+    | ForEach-Object { if ($_.Name -match '-(\d+\.\d+\.\d+)-full\.nupkg$') { [version]$Matches[1] } }
     | Sort-Object -Descending
     | Select-Object -First 1
+
+# Packages under the old pack id can't be the base of a delta for this one, so leave them out of the pack.
+Get-ChildItem -Path $ReleasesDir -Filter "*.nupkg" -ErrorAction SilentlyContinue
+    | Where-Object { -not $_.Name.StartsWith("$AppName-") }
+    | Remove-Item
 if ($largestVersion) {
     # Increment the patch number by 1
     $newVersion = "{0}.{1}.{2}" -f $largestVersion.Major, $largestVersion.Minor, ($largestVersion.Build + 1)
@@ -48,14 +55,14 @@ if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
 
 Write-Host "Packing $AppName version $newVersion with Velopack"
 # --framework makes Setup.exe install the .NET 10 Desktop Runtime if it is missing
-vpk pack -u $AppName -v $newVersion -p $PublishDir -e $ExeName -o $ReleasesDir --icon .\app.ico --runtime win-x64 --framework net10.0-x64-desktop
+vpk pack -u $AppName --packTitle $AppTitle -v $newVersion -p $PublishDir -e $ExeName -o $ReleasesDir --icon .\app.ico --runtime win-x64 --framework net10.0-x64-desktop
 if ($LASTEXITCODE -ne 0) { throw "vpk pack failed" }
 
 if (-not $LocalOnly) {
     Write-Host "Uploading $AppName version $newVersion to GitHub"
     # In CI, tag the commit that was built rather than whatever the branch points at by now
     $commitish = if ($env:GITHUB_SHA) { @("--targetCommitish", $env:GITHUB_SHA) } else { @() }
-    vpk upload github --repoUrl $RepoUrl --token $token -o $ReleasesDir --publish --tag "v$newVersion" --releaseName "$AppName $newVersion" @commitish
+    vpk upload github --repoUrl $RepoUrl --token $token -o $ReleasesDir --publish --tag "v$newVersion" --releaseName "$AppTitle $newVersion" @commitish
     if ($LASTEXITCODE -ne 0) { throw "vpk upload failed" }
 }
 
