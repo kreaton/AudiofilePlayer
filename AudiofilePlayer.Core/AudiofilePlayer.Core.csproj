@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <!-- NAudio 3.x is still preview; 2.2.1 is the current stable release. -->
-    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="NAudio" Version="3.3.0" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
   </ItemGroup>
 
