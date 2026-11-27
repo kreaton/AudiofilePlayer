@@ -31,6 +31,10 @@ npm run render
 
 That renders both videos. `npm run render:landscape` and `npm run render:short` render one each. Rendering downloads a headless Chrome the first time, and fetches the Bricolage Grotesque font from Google Fonts.
 
+`remotion.config.ts` has Chrome draw the frames on the GPU (`setChromiumOpenGlRenderer('angle')`, ANGLE on Direct3D) instead of its CPU renderer. Drawing the frames is the slow part of a render. On a Radeon 780M, 180 frames at 4K took 21 seconds this way and 56 seconds on the CPU. The x264 encoding runs alongside the drawing and adds little, so a hardware encoder isn't worth it. Remotion's bundled ffmpeg doesn't have AMD's encoder anyway. Without a usable GPU, remove that line.
+
+Remotion is 4.0.547.
+
 ## Files
 
 | Path | Contents |
@@ -48,7 +52,7 @@ YouTube accepts Shorts of up to three minutes, but blocks a Short of one to thre
 
 ## About the screenshots
 
-They show the real app, playing a demo library of silent MP3s with invented artists, albums and generated cover art. The video's credits say the artists are fictional. To update them after changing the UI, capture the app again at the same window size and keep the file names.
+They show the real app (version 1.1.9), playing a demo library of silent MP3s with invented artists, albums and generated cover art. The video's credits say the artists are fictional. To update them after changing the UI, capture the app again at the same window size and keep the file names.
 
 The captures are 1426×993, so in the 4K videos they're scaled up and look softer than the text and graphics, which are drawn at full 4K.
 

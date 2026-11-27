@@ -8,15 +8,15 @@
     "render:short": "remotion render PromoShort out/audiofileplayer-short-4k.mp4 --scale=2"
   },
   "dependencies": {
-    "@remotion/cli": "4.0.540",
-    "@remotion/google-fonts": "4.0.540",
-    "@remotion/media-utils": "4.0.540",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "remotion": "4.0.540"
+    "@remotion/cli": "4.0.547",
+    "@remotion/google-fonts": "4.0.547",
+    "@remotion/media-utils": "4.0.547",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.547"
   },
   "devDependencies": {
-    "@types/react": "19.2.2",
-    "typescript": "5.9.3"
+    "@types/react": "19.3.3",
+    "typescript": "7.0.2"
   }
 }

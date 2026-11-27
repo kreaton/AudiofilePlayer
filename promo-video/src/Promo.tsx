@@ -334,7 +334,7 @@ const Credits = () => {
 				))}
 				<Credit label="Source code (MIT)" value={REPO} delay={6 + CREDIT_ROWS.length * 6} />
 				<div style={{fontSize: 30, fontWeight: 400, color: '#d8d8e4', marginTop: 8, opacity: interpolate(frame, [40, 60], [0, 1], {extrapolateRight: 'clamp'})}}>
-					© 2026 Per Hejndorf · Version 1.1.2
+					© 2026 Per Hejndorf · Version 1.1.9
 					<br />
 					Artists and albums shown are fictional.
 				</div>
@@ -458,7 +458,7 @@ const PhoneEnding = () => {
 				))}
 				<Credit label="Open source, MIT licence" value={REPO} delay={10 + CREDIT_ROWS.length * 3} />
 				<div style={{fontSize: 32, fontWeight: 400, lineHeight: 1.35, color: '#d8d8e4', marginTop: 12, opacity: interpolate(frame, [24, 36], [0, 1], {extrapolateRight: 'clamp'})}}>
-					© 2026 Per Hejndorf · Version 1.1.2
+					© 2026 Per Hejndorf · Version 1.1.9
 					<br />
 					Artists and albums shown are fictional.
 				</div>
