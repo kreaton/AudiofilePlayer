@@ -15,6 +15,8 @@
 
 There's no library to build: open a folder and listen. If a track or album turns out not to be worth keeping, you can clean it up while it plays.
 
+▶️ **[Watch the video on YouTube](https://youtu.be/4q4kQakzi_c)**
+
 ## Install
 
 **[Download the installer](https://github.com/kreaton/AudiofilePlayer/releases/latest/download/AudiofilePlayer-win-Setup.exe)** and run it. If your PC doesn't have the .NET 10 Desktop Runtime yet, the installer adds it.
